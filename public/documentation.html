@@ -22,5 +22,63 @@
       <p>Why:</p>
     </h3>
 
+    <tbody>
+      
+      <tr>
+        <td>Get a list of all movies</td>
+        <td>/topMovies</td>
+        <td>GET</td>
+      </tr>
+      
+      <tr>
+        <td>Get information about a single movie using movie title</td>
+        <td>/topMovies/movie_title</td>
+        <td>GET</td>
+      </tr>
+
+      <tr>
+        <td>Get information about a genre using genre's name</td>
+        <td>/topMovies/genre/genre_name</td>
+        <td>GET</td>
+      </tr>
+
+      <tr>
+        <td>Get information about a director by director's name</td>
+        <td>/topMovies/director/director_name</td>
+        <td>GET</td>
+      </tr>
+       
+      <tr>
+        <td>Add a new user</td>
+        <td>/users</td>
+        <td>POST</td>
+      </tr>
+      
+      <tr>
+        <td>Update user's information</td>
+        <td>/users/user_number</td>
+        <td>PUT</td>
+      </tr>
+
+      <tr>
+        <td>Add a movie to a user's favorite movie list</td>
+        <td>/users/user_number/movie_title</td>
+        <td>POST</td>
+      </tr>
+
+      <tr>
+        <td>Remove a movie from a user's favorite movie list</td>
+        <td>/users/user_number/movie_title</td>
+        <td>DELETE</td>
+      </tr>
+      
+      <tr>
+        <td>Delete user registration</td>
+        <td>/users/user_number</td>
+        <td>DELETE</td>
+      </tr>
+      
+    </tbody>
+
   </body>
 </html>
