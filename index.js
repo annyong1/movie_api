@@ -1,11 +1,13 @@
-  const express = require('express'),
+const express = require('express'),
     app = express(),
     bodyParser = require('body-parser');
     uuid = require('uuid');
 
-app.use(bodyParser.json());
+app.use(express.json());
 
-let users = [
+app.use(express.urlencoded({ extended: true }))
+
+let users = [ 
    {
      id: 1,
      name: "Michael Scott",
@@ -105,17 +107,31 @@ let topMovies = [
 
 //CREATE
 
-app.post('/users', (req,res) => {
-  const newUser = req.body;
-
-  if (newUser.name) {
-    newUser.id = uuid.v4();
-    users.push(newUser);
-    res.status(201).json(newUser)
-  } else {
-    res.status(400).send('users need names')
-  }
-})
+app.post('/users', async (req,res) => {
+  await Users.findOne({ Username: req.body.Username })
+    .then((user) => {
+      if (user) {
+       return res.status(400).send(req.body.Username + 'already exists');
+      } else {
+        Users
+          .create({
+            Username: req.body.Username,
+            Password: req.body.Password,
+            Email: req.body.Email,
+            Birthday: req.body.Birthday
+          })
+          .then((user) =>{res.status(201).json(user) })
+        .catch((error) => {
+          console.error(error);
+          res.status(500).send('Error: ' + error);
+        })
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+      res.status(500).send('Error: ' + error);
+    });
+  });
 
 //UPDATE
 
@@ -245,4 +261,4 @@ app.use(express.static("public"));
 
   app.listen(8080, () => {
     console.log('Your app is listening on port 8080.');
-  });
+  })
