@@ -1,7 +1,17 @@
-const express = require('express'),
-    app = express(),
-    bodyParser = require('body-parser');
-    uuid = require('uuid');
+const express = require('express');
+const app = express();
+  app.use(express.json());
+  app.use(express.urlencoded({ extended: true }));
+const bodyParser = require('body-parser');
+uuid = require('uuid');
+
+const mongoose = require('mongoose');
+const Models = require('./models.js');
+
+const Movies = Models.Movie;
+const Users = Models.User;
+
+mongoose.connect('mongodb://127.0.0.1:27017/cfDB');
 
 app.use(express.json());
 
@@ -43,6 +53,7 @@ let topMovies = [
       }
     },
     {
+      _id: '5c3bd189515a081b363cb7e4',
       title: 'Godfather',
       director: 'Francis Ford Coppola',
       genre: {
@@ -181,6 +192,22 @@ app.delete('/users/:id/:movieTitle', (req,res) => {
     }
 })  
 
+//Delete user - mongoose
+
+app.delete('/users/:Username', async (req, res) => {
+  await Users.findOneAndDelete({ Username: req.params.Username })
+    .then((user) => {
+      if (!user) {
+        res.status(400).send(req.params.Username + ' was not found.');
+      } else {
+        res.status(200).send(req.params.Username + ' was deleted.');
+      }
+  })
+  .catch((err) => {
+    res.status(500).send('Error: ' + error);
+  });
+});
+
 //DELETE
 
 app.delete('/users/:id', (req,res) => {
@@ -195,6 +222,69 @@ app.delete('/users/:id', (req,res) => {
       res.status(400).send('no such user')                                                                                               
     }
 })  
+
+//Get all users - mongoose
+
+app.get('/users', async (req, res) => {
+  await Users.find()
+    .then((users) => {
+      res.status(201).json(users);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send('Error: ' + err);
+    });
+});
+
+//Get a user by username - mongoose
+
+app.get('/users/:Username', async (req, res) => {
+  await Users.findOne({ Username: req.params.Username })
+    .then((user) => {
+      res.json(user);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send('Error: ' + err);
+    });
+  });
+
+//Update user by username - mongoose
+
+app.put('/users/:Username', async (req, res) => {
+  await Users.findOneAndUpdate({ Username: req.params.Username }, { $set:
+    {
+      Username: req.body.Username,
+      Password: req.body.Password,
+      Email: req.body.Email,
+      Birthday: req.body.Birthday
+    }
+  },
+  { new: true })
+  .then((updatedUser) => {
+    res.json(updatedUser); 
+  })
+  .catch((err) => {
+    console.error(err);
+    res.status(500).send('Error: ' + err);
+  })
+});
+
+//Update list of favorite movies for a user - mongoose
+
+app.post('/users/:Username/movies/:movieTitle', async (req, res) => {
+  await Users.findOneAndUpdate({ Username: req.params.Username }, {
+    $push: { FavoriteMovies: req.params.movieTitle }
+  },
+  { new: true})
+  .then((updatedUser) => {
+    res.json(updatedUser);
+  })
+  .catch((err) => {
+    console.error(err);
+    res.status(500).send('Error: ' + err);
+  });
+});
 
 // READ
 
