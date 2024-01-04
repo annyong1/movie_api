@@ -17,6 +17,11 @@ app.use(express.json());
 
 app.use(express.urlencoded({ extended: true }))
 
+let auth = require('./auth')(app);
+
+const passport = require('passport');
+require('./passport');
+
 let users = [ 
    {
      id: 1,
@@ -132,14 +137,14 @@ app.post('/users', async (req,res) => {
             Birthday: req.body.Birthday
           })
           .then((user) =>{res.status(201).json(user) })
-        .catch((error) => {
+        .catch((err) => {
           console.error(error);
           res.status(500).send('Error: ' + error);
         })
       }
     })
-    .catch((error) => {
-      console.error(error);
+    .catch((err) => {
+      console.error(err);
       res.status(500).send('Error: ' + error);
     });
   });
