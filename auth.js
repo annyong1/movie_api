@@ -24,7 +24,7 @@ module.exports = (router) => {
         passport.authenticate('local', { session: false }, (error, user, info) => {
             if (error || !user) {
                 return res.status(400).json({
-                    message: 'Somethhing is not right.',
+                    message: 'Something is not right.',
                     user: user
                 });
             }
@@ -32,7 +32,7 @@ module.exports = (router) => {
                 if (error) {
                     res.send(error);
                 }
-                let token = generateJWTToke(user.toJSON());
+                let token = generateJWTToken(user.toJSON());
                 return res.json({ user, token });
             });
         }) (req, res);

@@ -275,6 +275,32 @@ app.put('/users/:Username', async (req, res) => {
   })
 });
 
+//JWT CONDITION ADDED
+
+app.put('/users/:Username', passport.authenticate('jwt', {
+session: false }), async (req, res) => {
+  if(req.user.Username !== req.params.Username){
+    return res.status(400).send('Permission denied');
+  }
+  await Users.findOneAndUpdate({ Username: req.params.Username }, {
+    $set:
+    {
+      Username: req.body.Username,
+      Password: req.body.Password,
+      Email: req.body.Email,
+      Birthday: req.body.Birthday
+    }
+  },
+    { new: true })
+    .then((updatedUser) => {
+      res.json(updatedUser);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).send('Error: ' + err);
+    })
+});
+
 //Update list of favorite movies for a user - mongoose
 
 app.post('/users/:Username/movies/:movieTitle', async (req, res) => {
@@ -293,9 +319,22 @@ app.post('/users/:Username/movies/:movieTitle', async (req, res) => {
 
 // READ
 
-app.get('/topMovies', (req, res) => {
-    res.status(200).json(topMovies);
-})
+// app.get('/topMovies', (req, res) => {
+//     res.status(200).json(topMovies);
+// })
+
+//READ or GET W/ JWT AUTHENTICATION
+
+app.get('/topMovies', passport.authenticate('jwt', {session: false }), async (req, res) => {
+  await Movies.find()
+    .then((movies) => {
+      res.status(201).json(movies);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.status(500).send('Error: ' + error);
+    });
+});
 
 //READ
 
