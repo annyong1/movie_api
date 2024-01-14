@@ -1,3 +1,12 @@
+const express = require('express');
+const app = express();
+  app.use(express.json());
+  app.use(express.urlencoded({ extended: true }));
+const bodyParser = require('body-parser');
+uuid = require('uuid');
+
+const { check, validationResult } = require('express-validator');
+
 const cors = require('cors');
   let allowedOrigins = ['http://localhost:8080', 'http://testsite.com'];
   app.use(cors({
@@ -10,15 +19,6 @@ const cors = require('cors');
       return callback(null, true);
     }
   }));
-
-const { check, validationResult } = require('espress-validator');
-
-const express = require('express');
-const app = express();
-  app.use(express.json());
-  app.use(express.urlencoded({ extended: true }));
-const bodyParser = require('body-parser');
-uuid = require('uuid');
 
 const mongoose = require('mongoose');
 const Models = require('./models.js');
