@@ -8,7 +8,8 @@ uuid = require('uuid');
 const { check, validationResult } = require('express-validator');
 
 const cors = require('cors');
-  let allowedOrigins = ['http://localhost:8080', 'http://testsite.com'];
+
+let allowedOrigins = ['http://localhost:8080', 'http://testsite.com'];
   app.use(cors({
     origin: (origin, callback) => {
       if(!origin) return callback(null, true);
@@ -217,7 +218,7 @@ app.post('/users/:id/:movieTitle', (req,res) => {
 app.delete('/users/:id/:movieTitle', (req,res) => {
   const { id, movieTitle } = req.params;
   
-  let user = users.find( user => user.id == id );
+let user = users.find( user => user.id == id );
   
   if (user) {
     user.favoriteMovies = user.favoriteMovies.filter( title => title !== movieTitle);
