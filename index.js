@@ -10,7 +10,7 @@ const { check, validationResult } = require('express-validator');
 const cors = require('cors');
   let allowedOrigins = ['http://localhost:8080', 'http://testsite.com'];
   app.use(cors({
-    origin: (orign, callback) => {
+    origin: (origin, callback) => {
       if(!origin) return callback(null, true);
       if(allowedOrigins.indexOf(origin) === -1){
         let message = 'The CORS policy for this application does not allow access from origin ' + origin;
