@@ -27,7 +27,9 @@ const Models = require('./models.js');
 const Movies = Models.Movie;
 const Users = Models.User;
 
-mongoose.connect('mongodb://127.0.0.1:27017/DuncanDB');
+//mongoose.connect('mongodb://127.0.0.1:27017/DuncanDB');
+
+mongoose.connect('mongodb+srv://jduncan:Guesswho1!@duncandb.c8hefkw.mongodb.net/duncandb?retryWrites=true&w=majority')
 
 app.use(express.json());
 
