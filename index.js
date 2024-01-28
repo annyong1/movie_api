@@ -29,7 +29,7 @@ const Users = Models.User;
 
 //mongoose.connect('mongodb://127.0.0.1:27017/DuncanDB');
 
-mongoose.connect('mongodb+srv://jduncan:Guesswho1!@duncandb.c8hefkw.mongodb.net/duncandb?retryWrites=true&w=majority')
+mongoose.connect( process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 app.use(express.json());
 
