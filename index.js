@@ -1,3 +1,11 @@
+const mongoose = require('mongoose');
+const Models = require('./models.js');
+
+const Movies = Models.Movie;
+const Users = Models.User;
+
+mongoose.connect( process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+
 const express = require('express');
 const app = express();
   app.use(express.json());
@@ -22,19 +30,10 @@ app.use(cors());
 //     }
 //   }));
 
-const mongoose = require('mongoose');
-const Models = require('./models.js');
 
-const Movies = Models.Movie;
-const Users = Models.User;
 
 //mongoose.connect('mongodb://127.0.0.1:27017/DuncanDB');
 
-mongoose.connect( process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
-
-app.use(express.json());
-
-app.use(express.urlencoded({ extended: true }))
 
 let auth = require('./auth')(app);
 
@@ -142,6 +141,32 @@ let topMovies = [
 
 //CREATE
 
+app.post('/users', async (req, res) => {
+  await Users.findOne({ Username: req.body.Username })
+    .then((user) => {
+      if (user) {
+        return res.status(400).send(req.body.Username + 'already exists');
+      } else {
+        Users
+          .create({
+            Username: req.body.Username,
+            Password: req.body.Password,
+            Email: req.body.Email,
+            Birthday: req.body.Birthday
+          })
+          .then((user) => {res.status(201).json(user) })
+        .catch((error) => {
+          console.error(error);
+          res.status(500).send('Error: ' + error);
+        })
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+      res.status(500).send('Error: ' + error);
+    });
+});
+ 
 app.post('/users',
   [
     check('Username', 'Username is required.').isLength({min: 5}),
@@ -165,7 +190,7 @@ app.post('/users',
         Users
           .create({
             Username: req.body.Username,
-            Password: hashedPassword,
+            Password: hashedPassword, 
             Email: req.body.Email,
             Birthday: req.body.Birthday
           })
@@ -243,7 +268,8 @@ app.delete('/users/:Username', async (req, res) => {
       }
   })
   .catch((err) => {
-    res.status(500).send('Error: ' + error);
+    console.error(err);
+    res.status(500).send('Error: ' + err);
   });
 });
 
@@ -307,6 +333,20 @@ app.put('/users/:Username', async (req, res) => {
     console.error(err);
     res.status(500).send('Error: ' + err);
   })
+});
+
+app.post('/users/:Username/movies/:MovieID', async (req,res) => {
+  await Users.findOneAndUpdate({ Username: req.params.Username }, {
+    $push: { FavoriteMovies: req.params.MovieID }
+  },
+  { new: true })
+  .then((updatedUser) => {
+    res.json(updatedUser);
+  })
+  .catch((err) => {
+    console.error(err);
+    res.status(500).send('Error: ' + err);
+  });
 });
 
 //JWT CONDITION ADDED
