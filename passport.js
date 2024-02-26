@@ -21,14 +21,14 @@ passport.use(
                     console.log('incorrect username');
                     return callback(null, false, {
                         message: 'Incorrect username or password.',
-                });
-            }
-            if (!user.validatePassword(password)) {
-                console.log('incorrect password');
-                return callback(null, false, {message: 'Incorrect password.' });
-            }
-            console.log('finished');
-            return callback(null, user);
+                    });
+                }
+                if (!user.validatePassord(password)) {
+                    console.log('incorrect password');
+                    return callback(null, false, { message: 'Incorrect password. '});
+                }
+                console.log('finished');
+                return callback(null, user);
             })
             .catch((error) => {
                 if (error) {
@@ -39,9 +39,9 @@ passport.use(
         }
     )
 );
-
+          
 passport.use(new JWTStrategy({
-    jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
+     jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
     secretOrKey: 'your_jwt_secret'
 }, async (jwtPayload, callback) => {
     return await Users.findById(jwtPayload._id)
