@@ -1,8 +1,17 @@
+const mongoose = require('mongoose');
+const Models = require('./models.js');
+
+const Movies = Models.Movie;
+const Users = Models.User;
+
+mongoose.connect( process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+
 const express = require('express');
 const app = express();
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
 const bodyParser = require('body-parser');
+  app.use(bodyParser.urlencoded({ extended: true }));
 uuid = require('uuid');
 
 const { check, validationResult } = require('express-validator');
@@ -10,31 +19,22 @@ const { check, validationResult } = require('express-validator');
 const cors = require('cors');
 app.use(cors());
 
-// let allowedOrigins = ['http://localhost:8080', 'http://testsite.com'];
-//   app.use(cors({
-//     origin: (origin, callback) => {
-//       if(!origin) return callback(null, true);
-//       if(allowedOrigins.indexOf(origin) === -1){
-//         let message = 'The CORS policy for this application does not allow access from origin ' + origin;
-//         return callback(new Error(message ), false);
-//       }
-//       return callback(null, true);
-//     }
-//   }));
-
-const mongoose = require('mongoose');
-const Models = require('./models.js');
-
-const Movies = Models.Movie;
-const Users = Models.User;
+let allowedOrigins = ['http://localhost:8080', 'http://testsite.com'];
+  
+app.use(cors({
+  origin: (origin, callback) => {
+    if(!origin) return callback(null, true);
+    if(allowedOrigins.indexOf(origin) === -1){
+      let message = 'The CORS policy for this application does not allow access from origin ' + origin;
+      return callback(new Error(message ), false);
+    }
+    return callback(null, true);
+  }
+}));
 
 //mongoose.connect('mongodb://127.0.0.1:27017/DuncanDB');
 
-mongoose.connect( process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
-
-app.use(express.json());
-
-app.use(express.urlencoded({ extended: true }))
+mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 let auth = require('./auth')(app);
 
@@ -54,7 +54,7 @@ let users = [
    },
 ]
 
-let topMovies = [
+let movies = [
     {
       title: 'Back to the Future',
       director: 'Robert Zemeckis',
@@ -144,44 +144,41 @@ let topMovies = [
 
 app.post('/users',
   [
-    check('Username', 'Username is required.').isLength({min: 5}),
+    check('Username', 'Username is required').isLength({min: 5}),
     check('Username', 'Username contains non-alphanumeric characters - not allowed.').isAlphanumeric(),
-    check('Password', 'Password is required.').not().isEmpty(),
-    check('Email', 'Email does not appear to be valid.').isEmail()
-  ], async (req,res) => {
-
+    check('Password', 'Password is required').not().isEmpty(),
+    check('Email', 'Email does not appear to be valid').isEmail()
+  ], async (req, res) => {
     let errors = validationResult(req);
-
     if (!errors.isEmpty()) {
-      return res.status(422).json({ errors: errors.array() }); 
+      return res.status(422).json({ errors: error.array()
+});
     }
-
-  let hashedPassword = Users.hashPassword(req.body.Password);
-  await Users.findOne({ Username: req.body.Username })
-    .then((user) => {
-      if (user) {
-       return res.status(400).send(req.body.Username + 'already exists');
-      } else {
-        Users
-          .create({
-            Username: req.body.Username,
-            Password: hashedPassword,
-            Email: req.body.Email,
-            Birthday: req.body.Birthday
-          })
-          .then((user) => {res.status(201).json(user) 
-})
-          .catch((error) => {
+    let hashedPassword = Users.hashPassword(req.body.Password);
+    await Users.findOne({ Username: req.body.Username })
+      .then((user) => {
+        if (user) {
+          return res.status(400).send(req.body.Username + 'already exists');
+        } else {
+          Users
+           .create({
+             Username: req.body.Username,
+             Password: hashedPassword,
+             Email: req.body.Email,
+             Birthday: req.body.Birthday
+           })
+           .then((user) => {res.status(201).json(user) })
+           .catch((error) => {
             console.error(error);
             res.status(500).send('Error: ' + error);
-          });
+        });
       }
     })
     .catch((error) => {
       console.error(error);
       res.status(500).send('Error: ' + error);
     });
-  });
+});
 
 //UPDATE
 
@@ -199,10 +196,8 @@ app.put('/users/:id', (req,res) => {
     }
 })
 
-//POST/UPDATE
-
-
 //CREATE
+
 app.post('/users/:id/:movieTitle', (req,res) => {
   const { id, movieTitle } = req.params;
   
@@ -243,7 +238,8 @@ app.delete('/users/:Username', async (req, res) => {
       }
   })
   .catch((err) => {
-    res.status(500).send('Error: ' + error);
+    console.error(err);
+    res.status(500).send('Error: ' + err);
   });
 });
 
@@ -309,6 +305,20 @@ app.put('/users/:Username', async (req, res) => {
   })
 });
 
+app.post('/users/:Username/movies/:MovieID', async (req,res) => {
+  await Users.findOneAndUpdate({ Username: req.params.Username }, {
+    $push: { FavoriteMovies: req.params.MovieID }
+  },
+  { new: true })
+  .then((updatedUser) => {
+    res.json(updatedUser);
+  })
+  .catch((err) => {
+    console.error(err);
+    res.status(500).send('Error: ' + err);
+  });
+});
+
 //JWT CONDITION ADDED
 
 app.put('/users/:Username', passport.authenticate('jwt', {
@@ -359,7 +369,7 @@ app.post('/users/:Username/movies/:movieTitle', async (req, res) => {
 
 //READ or GET W/ JWT AUTHENTICATION
 
-app.get('/topMovies', passport.authenticate('jwt', {session: false }), async (req, res) => {
+app.get('/movies', passport.authenticate('jwt', {session: false }), async (req, res) => {
   await Movies.find()
     .then((movies) => {
       res.status(201).json(movies);
@@ -372,9 +382,9 @@ app.get('/topMovies', passport.authenticate('jwt', {session: false }), async (re
 
 //READ
 
-app.get('/topMovies/:title', (req, res) => {
+app.get('/movies/:title', (req, res) => {
   const {title} = req.params;
-  const movie = topMovies.find( movie => movie.title === title );
+  const movie = movies.find( movie => movie.title === title );
 
   if (movie) {
     res.status(200).json(movie);
@@ -386,9 +396,9 @@ app.get('/topMovies/:title', (req, res) => {
 
 //READ
 
-app.get('/topMovies/genre/:genreName', (req, res) => {
+app.get('/movies/genre/:genreName', (req, res) => {
   const {genreName} = req.params;
-  const genre = topMovies.find( movie => movie.genre.name === genreName ).genre;
+  const genre = movies.find( movie => movie.genre.name === genreName ).genre;
 
   if (genre) {
     res.status(200).json(genre);
@@ -400,9 +410,9 @@ app.get('/topMovies/genre/:genreName', (req, res) => {
 
 //READ
 
-app.get('/topMovies/director/:directorName', (req, res) => {
+app.get('/movies/director/:directorName', (req, res) => {
   const {directorName} = req.params;
-  const director = topMovies.find( movie => movie.director.name === directorName ).director;
+  const director = movies.find( movie => movie.director.name === directorName ).director;
 
   if (director) {
     res.status(200).json(director);
