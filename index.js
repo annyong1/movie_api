@@ -34,6 +34,8 @@ app.use(cors({
 
 //mongoose.connect('mongodb://127.0.0.1:27017/DuncanDB');
 
+mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+
 let auth = require('./auth')(app);
 
 const passport = require('passport');
