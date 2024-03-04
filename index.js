@@ -261,6 +261,10 @@ app.delete('/users/:id', (req,res) => {
     }
 })  
 
+app.get('/', (req, res) => {
+  res.send('Hello, world!'); // Send a response to the client
+});
+
 //Get all users - mongoose
 
 app.get('/users', async (req, res) => {
