@@ -154,14 +154,14 @@ app.post('/users',
   ], async (req, res) => {
     let errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(422).json({ errors: error.array()
+      return res.status(422).json({ errors: errors.array()
 });
     }
     let hashedPassword = Users.hashPassword(req.body.Password);
     await Users.findOne({ Username: req.body.Username })
       .then((user) => {
         if (user) {
-          return res.status(400).send(req.body.Username + 'already exists');
+          return res.status(400).send(req.body.Username + ' already exists');
         } else {
           Users
            .create({
