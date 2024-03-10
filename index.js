@@ -44,104 +44,104 @@ let auth = require('./auth')(app);
 const passport = require('passport');
 require('./passport');
 
-let users = [ 
-   {
-     id: 1,
-     name: "Michael Scott",
-     favoriteMovies: []  //["Threat Level Midnight"]
-   },
-   {
-     id: 2,
-     name: "Jim Halpert",
-     favoriteMovies: ["Office Space"]
-   },
-]
+// let users = [ 
+//    {
+//      id: 1,
+//      name: "Michael Scott",
+//      favoriteMovies: []  //["Threat Level Midnight"]
+//    },
+//    {
+//      id: 2,
+//      name: "Jim Halpert",
+//      favoriteMovies: ["Office Space"]
+//    },
+// ]
 
-let movies = [
-    {
-      title: 'Back to the Future',
-      director: 'Robert Zemeckis',
-      genre: {
-        name:'Comedy'
-      }
-    },
-    {
-      title: 'District 9',
-      director: 'Neil Blomkamp',
-      genre: {
-        name:'Sci-Fi'
-      }
-    },
-    {
-      title: 'Mad Max: Fury Road',
-      director: 'George Miller',
-      genre: {
-        name:'Sci=Fi'
-      }
-    },
-    {
-      _id: '5c3bd189515a081b363cb7e4',
-      title: 'Godfather',
-      director: 'Francis Ford Coppola',
-      genre: {
-        name:'Drama'
-      }
-    },
-    {
-      title: 'Godfather 2',
-      director: {
-        name: 'Francis Ford Coppola'
-      },
-      genre: {
-        name:'Drama'
-      }
-    },
-    {
-      title: 'The Third Man',
-      director: {
-        name: 'Carol Reed'
-      },
-      genre: {
-        name:'Drama'
-      }
-    },
-    {
-      title: 'This is Spinal Tap',
-      director: {
-        name: 'Rob Reiner'
-      },
-      genre: {
-        name:'Comedy'
-      }
-    },
-    {
-      title: 'North by Northwest',
-      director: {
-        name: 'Alfred Hitchcock'
-      },
-      genre: {
-        name:'Action'
-      }
-    },
-    {
-      title: 'The Bridge on the River Kwai',
-      director: {
-        name: 'David Lean'
-      },
-      genre: {
-        name:'Action'
-      }
-    },
-    {
-      title: "Schindler's List",
-      director: {
-        name: 'Steven Spielberg'
-      },
-      genre: {
-        name:'Drama'
-      }
-    }
-  ];
+// let movies = [
+//     {
+//       title: 'Back to the Future',
+//       director: 'Robert Zemeckis',
+//       genre: {
+//         name:'Comedy'
+//       }
+//     },
+//     {
+//       title: 'District 9',
+//       director: 'Neil Blomkamp',
+//       genre: {
+//         name:'Sci-Fi'
+//       }
+//     },
+//     {
+//       title: 'Mad Max: Fury Road',
+//       director: 'George Miller',
+//       genre: {
+//         name:'Sci=Fi'
+//       }
+//     },
+//     {
+//       _id: '5c3bd189515a081b363cb7e4',
+//       title: 'Godfather',
+//       director: 'Francis Ford Coppola',
+//       genre: {
+//         name:'Drama'
+//       }
+//     },
+//     {
+//       title: 'Godfather 2',
+//       director: {
+//         name: 'Francis Ford Coppola'
+//       },
+//       genre: {
+//         name:'Drama'
+//       }
+//     },
+//     {
+//       title: 'The Third Man',
+//       director: {
+//         name: 'Carol Reed'
+//       },
+//       genre: {
+//         name:'Drama'
+//       }
+//     },
+//     {
+//       title: 'This is Spinal Tap',
+//       director: {
+//         name: 'Rob Reiner'
+//       },
+//       genre: {
+//         name:'Comedy'
+//       }
+//     },
+//     {
+//       title: 'North by Northwest',
+//       director: {
+//         name: 'Alfred Hitchcock'
+//       },
+//       genre: {
+//         name:'Action'
+//       }
+//     },
+//     {
+//       title: 'The Bridge on the River Kwai',
+//       director: {
+//         name: 'David Lean'
+//       },
+//       genre: {
+//         name:'Action'
+//       }
+//     },
+//     {
+//       title: "Schindler's List",
+//       director: {
+//         name: 'Steven Spielberg'
+//       },
+//       genre: {
+//         name:'Drama'
+//       }
+//     }
+//   ];
 
 //CREATE
 
