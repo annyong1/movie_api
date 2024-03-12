@@ -1,48 +1,62 @@
-const mongoose = require('mongoose');
-const Models = require('./models.js');
+const express = require('express'),
+  mongoose = require('mongoose'),
+  Models = require('./models.js');
+  { check, validationResult } = require('express-validator');
+
+const app = express();
+  app.use(express.json());
+  app.use(express.urlencoded({ extended: true }));  
 
 const Movies = Models.Movie;
 const Users = Models.User;
 
 mongoose.connect( process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
-const express = require('express');
-const app = express();
-  app.use(express.json());
-  app.use(express.urlencoded({ extended: true }));
-const bodyParser = require('body-parser');
-  app.use(bodyParser.urlencoded({ extended: true }));
-uuid = require('uuid');
-
-const { check, validationResult } = require('express-validator');
-
 const cors = require('cors');
-app.use(cors());
+  app.use(cors());
 
-let allowedOrigins = ['http://localhost:8080', 'http://testsite.com'];
-  
-app.use(cors({
-  origin: (origin, callback) => {
-    if(!origin) return callback(null, true);
-    if(allowedOrigins.indexOf(origin) === -1){
-      let message = 'The CORS policy for this application does not allow access from origin ' + origin;
-      return callback(new Error(message ), false);
-    }
-    return callback(null, true);
-  }
-}));
-
-//mongoose.connect('mongodb://127.0.0.1:27017/DuncanDB');
-
-mongoose.connect(process.env.CONNECTION_URI, { 
-  useNewUrlParser: true, 
-  useUnifiedTopology: true,
- });
-
-let auth = require('./auth')(app);
+  let auth = require('./auth')(app);
 
 const passport = require('passport');
 require('./passport');
+
+app.get('/', (req, res) => {
+  res.send('Welcome!'); // Send a response to the client
+});
+
+app.use(express.static("public"));
+
+//const express = require('express');
+//const app = express();
+  //app.use(express.json());
+  //app.use(express.urlencoded({ extended: true }));
+
+//   const bodyParser = require('body-parser');
+//   app.use(bodyParser.urlencoded({ extended: true }));
+// uuid = require('uuid');
+
+
+// let allowedOrigins = ['http://localhost:8080', 'http://testsite.com'];
+  
+// // app.use(cors({
+//   origin: (origin, callback) => {
+//     if(!origin) return callback(null, true);
+//     if(allowedOrigins.indexOf(origin) === -1){
+//       let message = 'The CORS policy for this application does not allow access from origin ' + origin;
+//       return callback(new Error(message ), false);
+//     }
+//     return callback(null, true);
+//   }
+// }));
+
+//mongoose.connect('mongodb://127.0.0.1:27017/DuncanDB');
+
+// mongoose.connect(process.env.CONNECTION_URI, { 
+//   useNewUrlParser: true, 
+//   useUnifiedTopology: true,
+//  });
+
+
 
 // let users = [ 
 //    {
@@ -261,9 +275,7 @@ app.delete('/users/:id', (req,res) => {
     }
 })  
 
-app.get('/', (req, res) => {
-  res.send('Hello, world!'); // Send a response to the client
-});
+
 
 //Get all users - mongoose
 
@@ -440,7 +452,6 @@ app.get('/documentation', (req, res) => {
 //     res.json(topMovies);
 //   });
   
-app.use(express.static("public"));
   
   // listen for requests
   
