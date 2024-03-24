@@ -1,161 +1,48 @@
-const express = require('express'),
-  mongoose = require('mongoose'),
-  Models = require('./models.js');
-  { check, validationResult } = require('express-validator');
-
-const app = express();
-  app.use(express.json());
-  app.use(express.urlencoded({ extended: true }));  
+const mongoose = require('mongoose');
+const Models = require('./models.js');
 
 const Movies = Models.Movie;
 const Users = Models.User;
 
 mongoose.connect( process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
+const express = require('express');
+const app = express();
+  app.use(express.json());
+  app.use(express.urlencoded({ extended: true }));
+const bodyParser = require('body-parser');
+  app.use(bodyParser.urlencoded({ extended: true }));
+uuid = require('uuid');
+
+const { check, validationResult } = require('express-validator');
+
 const cors = require('cors');
-  app.use(cors());
+app.use(cors());
 
-  let auth = require('./auth')(app);
-
-const passport = require('passport');
-require('./passport');
-
-app.get('/', (req, res) => {
-  res.send('Welcome!'); // Send a response to the client
-});
-
-app.use(express.static("public"));
-
-//const express = require('express');
-//const app = express();
-  //app.use(express.json());
-  //app.use(express.urlencoded({ extended: true }));
-
-//   const bodyParser = require('body-parser');
-//   app.use(bodyParser.urlencoded({ extended: true }));
-// uuid = require('uuid');
-
-
-// let allowedOrigins = ['http://localhost:8080', 'http://testsite.com'];
+let allowedOrigins = ['http://localhost:8080', 'http://testsite.com'];
   
-// // app.use(cors({
-//   origin: (origin, callback) => {
-//     if(!origin) return callback(null, true);
-//     if(allowedOrigins.indexOf(origin) === -1){
-//       let message = 'The CORS policy for this application does not allow access from origin ' + origin;
-//       return callback(new Error(message ), false);
-//     }
-//     return callback(null, true);
-//   }
-// }));
+app.use(cors({
+  origin: (origin, callback) => {
+    if(!origin) return callback(null, true);
+    if(allowedOrigins.indexOf(origin) === -1){
+      let message = 'The CORS policy for this application does not allow access from origin ' + origin;
+      return callback(new Error(message ), false);
+    }
+    return callback(null, true);
+  }
+}));
 
 //mongoose.connect('mongodb://127.0.0.1:27017/DuncanDB');
 
-// mongoose.connect(process.env.CONNECTION_URI, { 
-//   useNewUrlParser: true, 
-//   useUnifiedTopology: true,
-//  });
+mongoose.connect(process.env.CONNECTION_URI, { 
+  useNewUrlParser: true, 
+  useUnifiedTopology: true,
+ });
 
+let auth = require('./auth')(app);
 
-
-// let users = [ 
-//    {
-//      id: 1,
-//      name: "Michael Scott",
-//      favoriteMovies: []  //["Threat Level Midnight"]
-//    },
-//    {
-//      id: 2,
-//      name: "Jim Halpert",
-//      favoriteMovies: ["Office Space"]
-//    },
-// ]
-
-// let movies = [
-//     {
-//       title: 'Back to the Future',
-//       director: 'Robert Zemeckis',
-//       genre: {
-//         name:'Comedy'
-//       }
-//     },
-//     {
-//       title: 'District 9',
-//       director: 'Neil Blomkamp',
-//       genre: {
-//         name:'Sci-Fi'
-//       }
-//     },
-//     {
-//       title: 'Mad Max: Fury Road',
-//       director: 'George Miller',
-//       genre: {
-//         name:'Sci=Fi'
-//       }
-//     },
-//     {
-//       _id: '5c3bd189515a081b363cb7e4',
-//       title: 'Godfather',
-//       director: 'Francis Ford Coppola',
-//       genre: {
-//         name:'Drama'
-//       }
-//     },
-//     {
-//       title: 'Godfather 2',
-//       director: {
-//         name: 'Francis Ford Coppola'
-//       },
-//       genre: {
-//         name:'Drama'
-//       }
-//     },
-//     {
-//       title: 'The Third Man',
-//       director: {
-//         name: 'Carol Reed'
-//       },
-//       genre: {
-//         name:'Drama'
-//       }
-//     },
-//     {
-//       title: 'This is Spinal Tap',
-//       director: {
-//         name: 'Rob Reiner'
-//       },
-//       genre: {
-//         name:'Comedy'
-//       }
-//     },
-//     {
-//       title: 'North by Northwest',
-//       director: {
-//         name: 'Alfred Hitchcock'
-//       },
-//       genre: {
-//         name:'Action'
-//       }
-//     },
-//     {
-//       title: 'The Bridge on the River Kwai',
-//       director: {
-//         name: 'David Lean'
-//       },
-//       genre: {
-//         name:'Action'
-//       }
-//     },
-//     {
-//       title: "Schindler's List",
-//       director: {
-//         name: 'Steven Spielberg'
-//       },
-//       genre: {
-//         name:'Drama'
-//       }
-//     }
-//   ];
+const passport = require('passport');
+require('./passport');
 
 //CREATE
 
@@ -275,7 +162,9 @@ app.delete('/users/:id', (req,res) => {
     }
 })  
 
-
+app.get('/', (req, res) => {
+  res.send('Hello, world!'); // Send a response to the client
+});
 
 //Get all users - mongoose
 
@@ -382,9 +271,6 @@ app.post('/users/:Username/movies/:movieTitle', async (req, res) => {
 
 // READ
 
-// app.get('/topMovies', (req, res) => {
-//     res.status(200).json(topMovies);
-// })
 
 //READ or GET W/ JWT AUTHENTICATION
 
@@ -440,20 +326,12 @@ app.get('/movies/director/:directorName', (req, res) => {
   }
 
 })
-
-  //   res.send('Welcome to my movie listing!');
-  // });
   
 app.get('/documentation', (req, res) => {                  
   res.sendFile('public/documentation.html', { root: __dirname });
 });
   
-//   app.get('/movies', (req, res) => {
-//     res.json(topMovies);
-//   });
-  
-  
-  // listen for requests
+app.use(express.static("public"));
   
 const port = process.env.PORT || 8080;
 app.listen(port, '0.0.0.0',() => {
