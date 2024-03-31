@@ -8,6 +8,10 @@ const dbUrl = process.env.CONNECTION_URI;
 
 mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
+require('dotenv').config();
+
+const uri = process.env.CONNECTION_URI;
+
 const express = require('express');
 const app = express();
   app.use(express.json());
