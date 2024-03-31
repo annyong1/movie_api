@@ -5,6 +5,7 @@ const Movies = Models.Movie;
 const Users = Models.User;
 
 //const dbUrl = process.env.CONNECTION_URI;
+const port = process.env.PORT || 8080;
 
 mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
@@ -336,7 +337,6 @@ app.get('/documentation', (req, res) => {
   
 app.use(express.static("public"));
   
-const port = process.env.PORT || 8080;
 app.listen(port, '0.0.0.0',() => {
   console.log('Listening on Port ' + port);
 });
