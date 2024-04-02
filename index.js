@@ -180,7 +180,7 @@ app.get('/', (req, res) => {
 
 //Get all users - mongoose
 
-app.get('/users', async (req, res) => {
+app.get('/users', passport.authenticate('jwt', {session: false}), async (req, res) => {
   await Users.find()
     .then((users) => {
       res.status(201).json(users);
@@ -286,7 +286,7 @@ app.post('/users/:Username/movies/:movieTitle', async (req, res) => {
 
 //READ or GET W/ JWT AUTHENTICATION
 
-app.get('/movies', passport.authenticate('jwt', {session: false }), async (req, res) => {
+app.get('/movies', passport.authenticate('jwt', {session: false}), async (req, res) => {
   await Movies.find()
     .then((movies) => {
       res.status(201).json(movies);
