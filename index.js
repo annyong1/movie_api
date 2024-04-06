@@ -299,17 +299,20 @@ app.get('/movies', passport.authenticate('jwt', {session: false}), async (req, r
 
 //READ
 
-app.get('/movies/:title', (req, res) => {
-  const movie = movie.findOne( movie => movie.title === title );
-
-  if (movie) {
-    res.status(200).json(movie);
-  } else {
-    res.status(404).send('no such movie')
-  }
-
-})
-
+app.get('/movies/:title', passport.authenticate('jwt', { session: false }), (req, res) => {
+    Movies.findOne({ Title: req.params.Title })
+      .then((movie) => {
+        if (!movie) {
+          return res.status(404).send('Error: ' + req.params.Title + ' was not found');
+        }
+        res.status(200).json(movie);
+      })
+      .catch((err) => {
+        console.error(err);
+        res.status(500).send('Error: ' + err);
+      });
+    }
+);
 //READ
 
 app.get('/movies/genre/:genreName', (req, res) => {
