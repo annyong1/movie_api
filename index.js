@@ -178,7 +178,7 @@ app.get('/', (req, res) => {
   res.send('Hello, world!'); // Send a response to the client
 });
 
-//Get all users - mongoose
+//Get all users - mongooser
 
 app.get('/users', passport.authenticate('jwt', {session: false}), async (req, res) => {
   await Users.find()
@@ -299,7 +299,7 @@ app.get('/movies', passport.authenticate('jwt', {session: false}), async (req, r
 
 //READ
 
-app.get('/movies/:title', passport.authenticate('jwt', { session: false }), (req, res) => {
+app.get('/movies/:Title', passport.authenticate('jwt', { session: false }), (req, res) => {
     Movies.findOne({ Title: req.params.Title })
       .then((movie) => {
         if (!movie) {
