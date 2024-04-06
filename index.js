@@ -301,12 +301,12 @@ app.get('/movies', passport.authenticate('jwt', {session: false}), async (req, r
 
 app.get('/movies/:title', (req, res) => {
   const {title} = req.params;
-  const movies = movies.find( movie => movie.title === title );
+  const movie = movies.find( movie => movie.title === title );
 
   if (movie) {
     res.status(200).json(movie);
   } else {
-    res.status(400).send('no such movie')
+    res.status(404).send('no such movie')
   }
 
 })
