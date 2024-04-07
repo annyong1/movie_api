@@ -313,19 +313,25 @@ app.get('/movies/:Title', passport.authenticate('jwt', { session: false }), (req
       });
     }
 );
+
 //READ
 
-app.get('/movies/genre/:genreName', (req, res) => {
-  const {genreName} = req.params;
-  const genre = movies.find( movie => movie.genre.name === genreName ).genre;
+//app.get('/movies/genre/:genreName', (req, res) => {
 
-  if (genre) {
-    res.status(200).json(genre);
-  } else {
-    res.status(400).send('no such genre')
+app.get('/movies/:Genre', passport.authenticate('jwt', { session: false }), (req, res) => {
+  Movies.findOne({ Genre: req.params.Genre })
+    .then((movie) => {
+      if (!movie) {
+        return res.status(404).send('Error: ' + req.params.Genre + ' was not found');
+      }
+      res.status(200).json(movie);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send('Error: ' + err);
+    });
   }
-
-})
+);
 
 //READ
 
