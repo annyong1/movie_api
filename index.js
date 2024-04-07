@@ -329,7 +329,7 @@ app.get('/movies/genre/:genreName', passport.authenticate('jwt', { session: fals
       if (!movie) {
         return res.status(404).send('Error: ' + genreName + ' was not found');
       }
-      res.status(200).json(movie);
+      res.status(200).json(movie.Genre);
     })
     .catch((err) => {
       console.error(err);
