@@ -318,16 +318,18 @@ app.get('/movies/:Title', passport.authenticate('jwt', { session: false }), (req
 
 //app.get('/movies/genre/:genreName', (req, res) => {
 
-app.get('/movies/genre/:Genre', passport.authenticate('jwt', { session: false }), (req, res) => {
+app.get('/movies/genre/:genreName', passport.authenticate('jwt', { session: false }), (req, res) => {
   
-  console.log("Genre requested:", req.params.Genre);
+  const genreName = req.params.genreName;
+
+  console.log("Genre requested:", req.params.genreName);
   
-  Movies.findOne({ "Genre": req.params.Genre })
+  Movies.findOne({ "Genre.Name": genreName })
     .then((movie) => {
       if (!movie) {
-        return res.status(404).send('Error: ' + req.params.Genre + ' was not found');
+        return res.status(404).send('Error: Genre' + genreName + ' was not found');
       }
-      res.status(200).json(movie);
+      res.status(200).json(movie.Genre);
     })
     .catch((err) => {
       console.error(err);
