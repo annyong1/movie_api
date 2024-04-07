@@ -318,7 +318,7 @@ app.get('/movies/:Title', passport.authenticate('jwt', { session: false }), (req
 
 //app.get('/movies/genre/:genreName', (req, res) => {
 
-app.get('/movies/:Genre', passport.authenticate('jwt', { session: false }), (req, res) => {
+app.get('/movies/genre/:Genre', passport.authenticate('jwt', { session: false }), (req, res) => {
   
   console.log("Genre requested:", req.params.Genre);
   
