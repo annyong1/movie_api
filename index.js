@@ -319,6 +319,9 @@ app.get('/movies/:Title', passport.authenticate('jwt', { session: false }), (req
 //app.get('/movies/genre/:genreName', (req, res) => {
 
 app.get('/movies/:Genre', passport.authenticate('jwt', { session: false }), (req, res) => {
+  
+  console.log("Genre requested:", req.params.Genre);
+  
   Movies.findOne({ "Genre.Name": req.params.Genre })
     .then((movie) => {
       if (!movie) {
