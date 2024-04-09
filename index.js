@@ -4,7 +4,7 @@ const passport = require('passport');
 require('./passport');
 
 const mongoose = require('mongoose');
-const Models = require('./models.js');
+const Models = require('./models');
 
 const express = require('express');
 const app = express();
@@ -25,7 +25,6 @@ app.use(cors());
 const Movies = Models.Movie;
 const Users = Models.User;
 
-const Models = require('./models');
 
 //const dbUrl = process.env.CONNECTION_URI;
 const port = process.env.PORT || 8080;
