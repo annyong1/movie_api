@@ -117,7 +117,7 @@ app.put('/users/:id', (req, res) => {
   const updatedUser = req.body;
 
   // Update the user in the database based on the ID
-  Users.findOneAndUpdate({ id: id }, { name: updatedUser.name }, { new: true })
+  User.findOneAndUpdate({ id: id }, { name: updatedUser.name }, { new: true })
     .then(user => {
       if (user) {
         res.status(200).json(user);
