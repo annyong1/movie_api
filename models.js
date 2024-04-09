@@ -26,8 +26,6 @@ let userSchema = mongoose.Schema({
     FavoriteMovies: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Movie' }]
 });
 
-const User = mongoose.model('User', userSchema);
-
 userSchema.statics.hashPassword = (password) => {
     return bcrypt.hashSync(password, 10);
 };
