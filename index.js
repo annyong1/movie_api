@@ -246,9 +246,9 @@ app.get('/users/:Username', async (req, res) => {
 //   })
 // });
 
-app.post('/users/:Username/movies/:MovieId', async (req,res) => {
+app.post('/users/:Username/movies/:movieId', async (req,res) => {
   await Users.findOneAndUpdate({ Username: req.params.Username }, {
-    $push: { FavoriteMovies: req.params.MovieId }
+    $push: { FavoriteMovies: req.params.movieId }
   },
   { new: true })
   .then((updatedUser) => {
