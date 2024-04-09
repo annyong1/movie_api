@@ -8,7 +8,8 @@ const Models = require('./models.js');
 
 const express = require('express');
 const app = express();
-  
+
+ 
 let auth = require('./auth')(app);
 
 const bodyParser = require('body-parser');
@@ -23,6 +24,8 @@ app.use(cors());
 
 const Movies = Models.Movie;
 const Users = Models.User;
+
+const Models = require('./models');
 
 //const dbUrl = process.env.CONNECTION_URI;
 const port = process.env.PORT || 8080;
