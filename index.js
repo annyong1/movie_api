@@ -145,7 +145,7 @@ app.post('/users/:id/:movieTitle', (req,res) => {
 // })  
 
 app.delete('/users/:id/:movieID', (req, res) => {
-  const { id, movieTitle } = req.params;
+  const { id, movieID } = req.params;
 
   // Find the user by ID and update the favoriteMovies array
   User.findByIdAndUpdate(id, { $pull: { favoriteMovies: movieID } }, { new: true }, (err, user) => {
