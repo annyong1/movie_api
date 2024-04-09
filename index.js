@@ -100,39 +100,19 @@ app.post('/users',
 
 //UPDATE
 
-// app.put('/users/:id', (req,res) => {
-//   const { id } = req.params;
-//   const updatedUser = req.body;
-
-//   let user = users.find( user => user.id == id );
-  
-//   if (user) {
-//     user.name = updatedUser.name;
-//     res.status(200).json(user);
-//     } else {
-//       res.status(400).send('no such user')
-//     }
-// })
-
-app.put('/users/:id', (req, res) => {
+app.put('/users/:id', (req,res) => {
   const { id } = req.params;
   const updatedUser = req.body;
 
-  // Update the user in the database based on the ID
-  User.findOneAndUpdate({ id: id }, { name: updatedUser.name }, { new: true })
-    .then(user => {
-      if (user) {
-        res.status(200).json(user);
-      } else {
-        res.status(404).send('No such user');
-      }
-    })
-    .catch(err => {
-      console.error(err);
-      res.status(500).send('Error updating user');
-    });
-});
-
+  let user = users.find( user => user.id == id );
+  
+  if (user) {
+    user.name = updatedUser.name;
+    res.status(200).json(user);
+    } else {
+      res.status(400).send('no such user')
+    }
+})
 
 //CREATE
 
