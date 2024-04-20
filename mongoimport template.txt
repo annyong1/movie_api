@@ -1,1 +1,0 @@
-mongoimport --uri mongodb+srv://jduncan:Guesswho1!@duncandb.c8hefkw.mongodb.net/myflixdb --collection moviecollection --type json --file ../exported_collections/moviecollection.json
