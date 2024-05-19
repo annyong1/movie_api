@@ -233,7 +233,7 @@ app.get('/movies', async (req, res) => {
     });
 });
 
-app.get('/movies/:Title', passport.authenticate('jwt', { session: false }), (req, res) => {
+app.get('/movies/:Title', (req, res) => {
     Movies.findOne({ Title: req.params.Title })
       .then((movie) => {
         if (!movie) {
@@ -248,7 +248,7 @@ app.get('/movies/:Title', passport.authenticate('jwt', { session: false }), (req
     }
 );
 
-app.get('/movies/genre/:genreName', passport.authenticate('jwt', { session: false }), (req, res) => {
+app.get('/movies/genre/:genreName', (req, res) => {
   
   const genreName = req.params.genreName;
 
@@ -268,7 +268,7 @@ app.get('/movies/genre/:genreName', passport.authenticate('jwt', { session: fals
   }
 );
 
-app.get('/movies/director/:directorName', passport.authenticate('jwt', { session: false }), (req, res) => {
+app.get('/movies/director/:directorName', (req, res) => {
   
   const directorName = req.params.directorName;
 
