@@ -29,7 +29,7 @@ const port = process.env.PORT || 8080;
 
 mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
-let allowedOrigins = [];
+let allowedOrigins = ['http://localhost:1234'];
   
 app.use(cors({
   origin: (origin, callback) => {
