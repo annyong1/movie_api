@@ -2,11 +2,11 @@
   "name": "movie_api",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "index.html",
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "build": "parcel build index.js"
+    "build": "parcel build index.html"
   },
   "keywords": [],
   "author": "",
