@@ -27,7 +27,7 @@ const Users = Models.User;
 
 const port = process.env.PORT || 8080;
 
-mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect('process.env.CONNECTION_URI');
 
 let allowedOrigins = ['http://localhost:1234'];
   
