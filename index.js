@@ -22,22 +22,6 @@ const cors = require('cors');
 // Allow any oragin to access app
 app.use(cors());
 
-// Set which http oragins are allowed to access API
-// const allowedOrigins = [];
-
-// app.use(
-//   cors({
-//     origin: (origin, callback) => {
-//       if (!origin) return callback(null, true);
-//       if (allowedOrigins.indexOf(origin) === -1) {
-//         // If a specific origin isn't found on the list of allowed origins
-//         let message = 'The CORS policy for this application doesn't allow access from origin ' + origin;
-//         return callback(new Error(message), false);
-//       }
-//       return callback(null, true);
-//     },
-//   })
-// );
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
@@ -226,7 +210,7 @@ app.post('/users/:Username/movies/:movieTitle', async (req, res) => {
     });
 });
 
-app.get('/movies', async (req, res) => {
+app.get('/movies', passport.authenticate ('jwt', { session: false }), async (req, res) => {
   await Movies.find()
     .then((movies) => {
       res.status(201).json(movies);
@@ -237,7 +221,7 @@ app.get('/movies', async (req, res) => {
     });
 });
 
-app.get('/movies/:Title', (req, res) => {
+app.get('/movies/:Title', passport.authenticate ('jwt', { session: false }), (req, res) => {
   Movies.findOne({ Title: req.params.Title })
     .then((movie) => {
       if (!movie) {
@@ -252,7 +236,7 @@ app.get('/movies/:Title', (req, res) => {
 }
 );
 
-app.get('/movies/genre/:genreName', (req, res) => {
+app.get('/movies/genre/:genreName', passport.authenticate('jwt', { session: false }), (req, res) => {
 
   const genreName = req.params.genreName;
 
@@ -272,7 +256,7 @@ app.get('/movies/genre/:genreName', (req, res) => {
 }
 );
 
-app.get('/movies/director/:directorName', (req, res) => {
+app.get('/movies/director/:directorName', passport.authenticate('jwt', { session: false }), (req, res) => {
 
   const directorName = req.params.directorName;
 
@@ -291,10 +275,6 @@ app.get('/movies/director/:directorName', (req, res) => {
     });
 }
 );
-
-// app.get('/documentation', (req, res) => {
-//   res.sendFile('public/documentation.html', { root:__dirname });
-// });
 
 app.use(express.static("public"));
 
