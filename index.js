@@ -20,8 +20,29 @@ const { check, validationResult } = require('express-validator');
 const cors = require('cors');
 
 // Allow any oragin to access app
-app.use(cors());
+let allowedOrigins = [
+	'http://localhost:8080',
+	'http://localhost:1234',
+	'http://localhost:4200',
+  'http://localhost:3000',
+  'https://duncanflixdb-4ad2a1debcf7.herokuapp.com',
+];
 
+app.use(
+	cors({
+		origin: (origin, callback) => {
+			if (!origin) return callback(null, true);
+			if (allowedOrigins.indexOf(origin) === -1) {
+				// If a specific origin isn't found on the list of allowed origins
+				let message =
+					'The CORS policy for this application doesn"t allow access from origin ' +
+					origin;
+				return callback(new Error(message), false);
+			}
+			return callback(null, true);
+		},
+	})
+);
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
@@ -233,7 +254,7 @@ app.get('/movies/:Title', passport.authenticate ('jwt', { session: false }), (re
       console.error(err);
       res.status(500).send('Error: ' + err);
     });
-}
+  }
 );
 
 app.get('/movies/genre/:genreName', passport.authenticate('jwt', { session: false }), (req, res) => {
@@ -273,10 +294,32 @@ app.get('/movies/director/:directorName', passport.authenticate('jwt', { session
       console.error(err);
       res.status(500).send('Error: ' + err);
     });
-}
+  }
 );
 
-app.use(express.static("public"));
+app.use(express.static('public'));
+
+app.post('/signup', (req, res) => {
+  const { Username, Passowrd } = req.body;
+  const userExists = users.find(user => user.Username === Username)
+  if(userExists) {
+    return res.status(400).json({message: 'User already exists'})
+  }
+  const newUser = { Username, Password };
+  users.push(newUser);
+  res.status(201).json({ message: 'User created successfully', user: newUser });
+});
+
+app.post('/login', (req, res) => {
+  const { Username, Password } = req.body;
+  const user = users.find(user => user.Username === Username && user.Password === Password);
+  if (user) {
+    const token = 'your_jwt_secret';
+    res.json({ user, token });
+  } else {
+    res.status(400).json({ message: 'Invalid username or password' }); 
+  }
+});
 
 const port = process.env.PORT || 3000;
 app.listen(port, '0.0.0.0', () => {
