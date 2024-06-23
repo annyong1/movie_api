@@ -299,17 +299,6 @@ app.get('/movies/director/:directorName', passport.authenticate('jwt', { session
 
 app.use(express.static('public'));
 
-app.post('/login', (req, res) => {
-  const { Username, Password } = req.body;
-  const user = users.find(user => user.Username === Username && user.Password === Password);
-  if (user) {
-    const token = 'your_jwt_secret';
-    res.json({ user, token });
-  } else {
-    res.status(400).json({ message: 'Invalid username or password' }); 
-  }
-});
-
 const port = process.env.PORT || 3000;
 app.listen(port, '0.0.0.0', () => {
   console.log('Listening on Port ' + port);
