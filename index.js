@@ -297,7 +297,7 @@ app.get('/movies/director/:directorName', passport.authenticate('jwt', { session
   }
 );
 
-app.use(express.static("public"));
+app.use(express.static('public'));
 
 app.post('/signup', (req, res) => {
   const { Username, Passowrd } = req.body;
