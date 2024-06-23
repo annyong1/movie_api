@@ -299,17 +299,6 @@ app.get('/movies/director/:directorName', passport.authenticate('jwt', { session
 
 app.use(express.static('public'));
 
-app.post('/signup', (req, res) => {
-  const { Username, Passowrd } = req.body;
-  const userExists = users.find(user => user.Username === Username)
-  if(userExists) {
-    return res.status(400).json({message: 'User already exists'})
-  }
-  const newUser = { Username, Password };
-  users.push(newUser);
-  res.status(201).json({ message: 'User created successfully', user: newUser });
-});
-
 app.post('/login', (req, res) => {
   const { Username, Password } = req.body;
   const user = users.find(user => user.Username === Username && user.Password === Password);
