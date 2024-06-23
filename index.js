@@ -32,7 +32,7 @@ const Users = Models.User;
 
 mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
-app.post('/users',
+app.post('/signup',
   [
     check('Username', 'Username is required').isLength({ min: 5 }),
     check('Username', 'Username contains non-alphanumeric characters - not allowed.').isAlphanumeric(),
