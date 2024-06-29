@@ -9,6 +9,7 @@ const Models = require('./models');
 const express = require('express');
 const app = express();
 
+
 let auth = require('./auth')(app);
 
 const bodyParser = require('body-parser');
@@ -18,6 +19,7 @@ uuid = require('uuid');
 const { check, validationResult } = require('express-validator');
 
 const cors = require('cors');
+app.use(cors());
 
 // Allow any oragin to access app
 let allowedOrigins = [
