@@ -24,13 +24,7 @@ const cors = require('cors');
 app.use(cors());
 
 // Allow any oragin to access app
-let allowedOrigins = [
-	'http://localhost:8080',
-	'http://localhost:1234',
-	'http://localhost:4200',
-  'http://localhost:3000',
-  'https://duncanflixdb-4ad2a1debcf7.herokuapp.com',
-];
+let allowedOrigins = "*";
 
 app.use(
 	cors({
