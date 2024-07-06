@@ -27,7 +27,7 @@ let allowedOrigins = [
 	'http://localhost:1234',
 	'http://localhost:4200',
   'http://localhost:3000',
-  'https://duncanflixdb-4ad2a1debcf7.herokuapp.com',
+  'https://duncanflixapi-2df251ca79e4.herokuapp.com/',
 ];
 
 app.use(
