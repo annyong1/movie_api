@@ -9,8 +9,7 @@ const Models = require('./models');
 const express = require('express');
 const app = express();
 
-
-let auth = require('./auth')(app);
+require('./auth')(app);
 
 const bodyParser = require('body-parser');
 
