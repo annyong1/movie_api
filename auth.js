@@ -23,6 +23,7 @@ module.exports = (router) => {
 					user: user,
 				});
 			}
+			let auth = require('./auth')(app);
 			req.login(user, { session: false }, (error) => {
 				if (error) {
 					res.send(error);
