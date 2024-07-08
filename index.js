@@ -9,9 +9,6 @@ const Models = require('./models');
 const express = require('express');
 const app = express();
 
-
-let auth = require('./auth')(app);
-
 const bodyParser = require('body-parser');
 
 uuid = require('uuid');
@@ -50,6 +47,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+let auth = require('./auth')(app);
 
 const Movies = Models.Movie;
 const Users = Models.User;
