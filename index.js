@@ -48,7 +48,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-let auth = require('./auth')(app);
+let auth = require('./auth')(app); 
 
 const Movies = Models.Movie;
 const Users = Models.User;
@@ -107,24 +107,48 @@ app.post('/users/:id/:movieTitle', (req, res) => {
   }
 })
 
-app.delete('/users/:id/:movieID', (req, res) => {
-  const { id, movieID } = req.params;
+// app.delete('', (req, res) => {
+//   const { id, movieID } = req.params;
 
-  // Find the user by ID and update the favoriteMovies array
-  User.findByIdAndUpdate(id, { $pull: { favoriteMovies: movieID } }, { new: true }, (err, user) => {
-    if (err) {
-      // Handle database errors
-      console.error(err);
-      res.status(500).send('Internal Server Error');
-    } else if (!user) {
-      // If user not found, send a 404 response
-      res.status(404).send('User not found');
-    } else {
-      // Successfully removed the movie from the user's favoriteMovies array
-      res.status(200).send(`${movieID} has been removed from user ${id}'s array`);
-    }
-  });
-});
+//   // Find the user by ID and update the favoriteMovies array
+//   User.findByIdAndUpdate(id, { $pull: { favoriteMovies: movieID } }, { new: true }, (err, user) => {
+//     if (err) {
+//       // Handle database errors
+//       console.error(err);
+//       res.status(500).send('Internal Server Error');
+//     } else if (!user) {
+//       // If user not found, send a 404 response
+//       res.status(404).send('User not found');
+//     } else {
+//       // Successfully removed the movie from the user's favoriteMovies array
+//       res.status(200).send(`${movieID} has been removed from user ${id}'s array`);
+//     }
+//   });
+// });
+
+app.delete(
+  '/users/:id/:movieID',
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    User.findOneAndUpdate(
+      { Username: req.params.Username },
+      {
+        $pull: { favoriteMovies: req.params.movieID },
+      },
+      { new: true }
+    )
+      .then((updatedUser) => {
+        if (!updatedUser) {
+          return res.status(404).send('Error: User not found');
+        }
+        res.json(updatedUser);
+      })
+      .catch((error) => {
+        console.error(error);
+        res.status(500).send('Error: ' + error);
+      });
+  }
+);
 
 app.delete('/users/:Username', async (req, res) => {
   await Users.findOneAndDelete({ Username: req.params.Username })
