@@ -133,7 +133,7 @@ app.delete(
     Users.findOneAndUpdate(
       { Username: req.params.Username },
       {
-        $pull: { favoriteMovies: req.params.movieID },
+        $pull: { FavoriteMovies: req.params.movieID },
       },
       { new: true }
     )
