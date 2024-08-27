@@ -130,7 +130,7 @@ app.delete(
   '/users/:Username/:movieID',
   passport.authenticate('jwt', { session: false }),
   (req, res) => {
-    User.findOneAndUpdate(
+    Users.findOneAndUpdate(
       { Username: req.params.Username },
       {
         $pull: { favoriteMovies: req.params.movieID },
@@ -325,7 +325,7 @@ app.get('/movies/director/:directorName', passport.authenticate('jwt', { session
 
 app.use(express.static('public'));
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 8080;
 app.listen(port, '0.0.0.0', () => {
   console.log('Listening on Port ' + port);
 });
