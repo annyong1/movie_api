@@ -127,7 +127,7 @@ app.post('/users/:id/:movieTitle', (req, res) => {
 // });
 
 app.delete(
-  '/users/:id/:movieID',
+  '/users/Username/:movieID',
   passport.authenticate('jwt', { session: false }),
   (req, res) => {
     User.findOneAndUpdate(
