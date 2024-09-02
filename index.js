@@ -25,6 +25,7 @@ let allowedOrigins = [
 	'http://localhost:4200',
   'http://localhost:3000',
   'https://duncanflixapi-2df251ca79e4.herokuapp.com/',
+  'https://duncanimdb.netlify.app/'
 ];
 
 app.use(
